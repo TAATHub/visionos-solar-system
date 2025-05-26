@@ -45,20 +45,23 @@ struct ImmersiveView: View {
             // 円運動のアニメーション設定
             let rotationDuration: TimeInterval = 5.0 // 5秒で1周
             
-            // Y軸周りの回転アニメーションを作成
-            let rotationAnimation = FromToByAnimation<Transform>(
-                from: Transform(rotation: simd_quatf(angle: 0, axis: [0, 1, 0]), translation: .init(0, 1, 0)),
-                to: Transform(rotation: simd_quatf(angle: 2 * .pi, axis: [0, 1, 0]), translation: .init(0, 1, 0)),
+            // OrbitAnimationを使用した周回アニメーション
+            let orbitAnimation = OrbitAnimation(
+                name: "orbit",
                 duration: rotationDuration,
-                timing: .linear,
+                axis: [0, 1, 0],
+                startTransform: Transform(translation: .init(1, 0, 0)),
+                orientToPath: false,
+                rotationCount: 1,
                 bindTarget: .transform
             )
             
             // アニメーションをループするように設定
-            let animationResource = try! AnimationResource.generate(with: rotationAnimation)
+            let animationResource = try! AnimationResource.generate(with: orbitAnimation)
             
             // アニメーションを開始
-            centerEntity.playAnimation(animationResource.repeat())        }
+            sphereEntity.playAnimation(animationResource.repeat())
+        }
     }
 }
 
