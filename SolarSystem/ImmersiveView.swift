@@ -14,6 +14,9 @@ struct ImmersiveView: View {
                 // https://developer.apple.com/
             }
             
+            // ECSシステムを登録
+            OrbitSystem.registerSystem()
+            
             // 赤い球体のEntityを作成
             let sphereEntity = Entity()
             
@@ -28,39 +31,21 @@ struct ImmersiveView: View {
             // ModelComponentを追加
             sphereEntity.components.set(ModelComponent(mesh: sphereMesh, materials: [redMaterial]))
             
-            // 中心点となるエンティティを作成
-            let centerEntity = Entity()
-            centerEntity.position = [0, 1, 0]
+            // OrbitComponentを追加（半径1.0、5秒で1周、中心は[0, 1, 0]）
+            let orbitComponent = OrbitComponent(
+                radius: 1.0,
+                axis: [0, 1, 0],
+                period: 5.0,
+                centerPosition: [0, 1, 0]
+            )
+            sphereEntity.components.set(orbitComponent)
             
-            // 球体を中心エンティティの子として追加
-            centerEntity.addChild(sphereEntity)
-            
-            // 球体の相対位置を設定（半径1.0の位置）
-            sphereEntity.position = [1.0, 0, 0]
+            // 初期位置を設定
+            sphereEntity.position = [1.0, 1.0, 0]
             sphereEntity.scale = [1.0, 1.0, 1.0]
             
-            // 中心エンティティをコンテンツに追加
-            content.add(centerEntity)
-            
-            // 円運動のアニメーション設定
-            let rotationDuration: TimeInterval = 5.0 // 5秒で1周
-            
-            // OrbitAnimationを使用した周回アニメーション
-            let orbitAnimation = OrbitAnimation(
-                name: "orbit",
-                duration: rotationDuration,
-                axis: [0, 1, 0],
-                startTransform: Transform(translation: .init(1, 0, 0)),
-                orientToPath: false,
-                rotationCount: 1,
-                bindTarget: .transform
-            )
-            
-            // アニメーションをループするように設定
-            let animationResource = try! AnimationResource.generate(with: orbitAnimation)
-            
-            // アニメーションを開始
-            sphereEntity.playAnimation(animationResource.repeat())
+            // 球体をコンテンツに直接追加
+            content.add(sphereEntity)
         }
     }
 }
