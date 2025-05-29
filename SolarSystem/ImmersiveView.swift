@@ -50,8 +50,8 @@ struct ImmersiveView: View {
     private func createCelestialBody(_ body: CelestialBody) -> Entity {
         let entity = Entity()
         
-        // サイズを調整（太陽は0.5、他は太陽との相対比率で計算）
-        let baseRadius: Float = body.name == "Sun" ? 0.5 : 0.5 * body.radius * 0.1 // 惑星は見やすくするために小さく調整
+        // サイズを調整
+        let baseRadius: Float = body.name == "Sun" ? body.radius : body.radius * 0.05 // 惑星は見やすくするために小さく調整
         
         // 球体メッシュを作成
         let sphereMesh = MeshResource.generateSphere(radius: baseRadius)
