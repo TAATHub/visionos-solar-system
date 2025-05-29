@@ -1,56 +1,84 @@
 import SwiftUI
 import RealityKit
-import RealityKitContent
 
 struct ImmersiveView: View {
 
     var body: some View {
         RealityView { content in
-            // Add the initial RealityKit content
-            if let immersiveContentEntity = try? await Entity(named: "Immersive", in: realityKitContentBundle) {
-                content.add(immersiveContentEntity)
-
-                // Put skybox here.  See example in World project available at
-                // https://developer.apple.com/
-            }
-            
             // ECSシステムを登録
             OrbitSystem.registerSystem()
+            RotationSystem.registerSystem()
             
-            // 赤い球体のEntityを作成
-            let sphereEntity = Entity()
-            
-            // プリミティブ球体のメッシュを作成
-            let sphereMesh = MeshResource.generateSphere(radius: 0.1)
-            
-            // 赤いSimpleMaterialを作成（non-metallic）
-            var redMaterial = SimpleMaterial()
-            redMaterial.color = .init(tint: .red)
-            redMaterial.metallic = 0.0
-            
-            // ModelComponentを追加
-            sphereEntity.components.set(ModelComponent(mesh: sphereMesh, materials: [redMaterial]))
-            
-            // OrbitComponentを追加（半径1.0、5秒で1周、中心は[0, 1, 0]）
-            let orbitComponent = OrbitComponent(
-                radius: 1.0,
-                axis: [0, 1, 0],
-                period: 5.0,
-                centerPosition: [0, 1, 0]
-            )
-            sphereEntity.components.set(orbitComponent)
-            
-            // 初期位置を設定
-            sphereEntity.position = [1.0, 1.0, 0]
-            sphereEntity.scale = [1.0, 1.0, 1.0]
-            
-            // 球体をコンテンツに直接追加
-            content.add(sphereEntity)
+            // 太陽系の天体を作成
+            for (index, body) in SolarSystemData.celestialBodies.enumerated() {
+                let entity = createCelestialBody(body)
+                
+                // 太陽以外の惑星には軌道コンポーネントを追加
+                if body.name != "Sun" {
+                    let orbitComponent = OrbitComponent(
+                        radius: body.orbitRadius,
+                        axis: [0, 1, 0],
+                        period: TimeInterval(body.orbitPeriod),
+                        centerPosition: [0, 1, 0]
+                    )
+                    entity.components.set(orbitComponent)
+                    
+                    // 初期位置を軌道上に設定
+                    let angle = Float(index) * (2.0 * .pi / Float(SolarSystemData.celestialBodies.count - 1))
+                    let x = body.orbitRadius * cos(angle)
+                    let z = body.orbitRadius * sin(angle)
+                    entity.position = [x, 1.0, z]
+                } else {
+                    // 太陽は中心に配置
+                    entity.position = [0, 1, 0]
+                }
+                
+                // 自転コンポーネントを追加
+                let rotationComponent = RotationComponent(
+                    axis: [0, 1, 0],
+                    period: TimeInterval(body.rotationPeriod),
+                    axialTilt: body.axialTilt
+                )
+                entity.components.set(rotationComponent)
+                
+                content.add(entity)
+            }
         }
+    }
+    
+    /// 天体のEntityを作成するヘルパー関数
+    private func createCelestialBody(_ body: CelestialBody) -> Entity {
+        let entity = Entity()
+        
+        // サイズを調整（太陽は0.5、他は太陽との相対比率で計算）
+        let baseRadius: Float = body.name == "Sun" ? 0.5 : 0.5 * body.radius * 0.1 // 惑星は見やすくするために小さく調整
+        
+        // 球体メッシュを作成
+        let sphereMesh = MeshResource.generateSphere(radius: baseRadius)
+        
+        // マテリアルを作成
+        var material = SimpleMaterial()
+        // SIMD4を使用してRGBAを直接設定
+        material.color = SimpleMaterial.BaseColor(tint: .init(
+            red: CGFloat(body.color.x),
+            green: CGFloat(body.color.y),
+            blue: CGFloat(body.color.z),
+            alpha: 1.0
+        ))
+        material.metallic = 0.0
+        
+        // ModelComponentを追加
+        entity.components.set(ModelComponent(mesh: sphereMesh, materials: [material]))
+        
+        return entity
     }
 }
 
-#Preview(immersionStyle: .mixed) {
-    ImmersiveView()
-        .environment(AppModel())
+#if DEBUG
+struct ImmersiveView_Previews: PreviewProvider {
+    static var previews: some View {
+        ImmersiveView()
+            .environment(AppModel())
+    }
 }
+#endif
