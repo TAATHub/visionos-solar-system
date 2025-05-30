@@ -42,7 +42,7 @@ struct ToggleImmersiveSpaceButton: View {
                 }
             }
         } label: {
-            Text(appModel.immersiveSpaceState == .open ? "Hide Solar System" : "Show Solar System")
+            Text(appModel.immersiveSpaceState == .open ? "おわる" : "太陽系を見る")
         }
         .disabled(appModel.immersiveSpaceState == .inTransition)
         .animation(.none, value: 0)

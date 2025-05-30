@@ -53,7 +53,7 @@ struct ImmersiveView: View {
             }
             
             solarSystemEntity.position = [0, 0.5, 0]
-            solarSystemEntity.scale *= 0.5
+            solarSystemEntity.scale *= 0.25
             content.add(solarSystemEntity)
         }
         .gesture(
