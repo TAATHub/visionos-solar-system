@@ -18,7 +18,8 @@ struct ImmersiveView: View {
                 
                 // タッチ機能を追加
                 entity.components.set(InputTargetComponent())
-                entity.components.set(CollisionComponent(shapes: [.generateSphere(radius: body.name == "Sun" ? body.radius : body.radius * 0.05)]))
+                let collisionRadius = max(0.1, body.name == "Sun" ? body.radius : body.radius * 0.05)
+                entity.components.set(CollisionComponent(shapes: [.generateSphere(radius: collisionRadius)]))
                 
                 // 太陽以外の惑星には軌道コンポーネントを追加
                 if body.name != "Sun" {
