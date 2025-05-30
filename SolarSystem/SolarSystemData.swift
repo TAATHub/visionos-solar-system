@@ -14,7 +14,7 @@ struct CelestialBody {
 
 /// 太陽系の天体データ
 struct SolarSystemData {
-    static let earthOrbitPeriod: Float = 10.0 // 地球の公転周期を1秒に設定
+    static let earthOrbitPeriod: Float = 30 // 地球の公転周期を30秒に設定
     static let earthRotationPeriod: Float = 1.0 // 地球の自転周期を0.1秒に設定
     
     static let celestialBodies: [CelestialBody] = [

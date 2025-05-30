@@ -2,6 +2,7 @@ import SwiftUI
 import RealityKit
 
 struct ImmersiveView: View {
+    @Environment(AppModel.self) private var appModel
 
     var body: some View {
         RealityView { content in
@@ -9,9 +10,15 @@ struct ImmersiveView: View {
             OrbitSystem.registerSystem()
             RotationSystem.registerSystem()
             
+            let solarSystemEntity = Entity()
+            
             // 太陽系の天体を作成
             for (index, body) in SolarSystemData.celestialBodies.enumerated() {
                 let entity = createCelestialBody(body)
+                
+                // タッチ機能を追加
+                entity.components.set(InputTargetComponent())
+                entity.components.set(CollisionComponent(shapes: [.generateSphere(radius: body.name == "Sun" ? body.radius : body.radius * 0.05)]))
                 
                 // 太陽以外の惑星には軌道コンポーネントを追加
                 if body.name != "Sun" {
@@ -41,14 +48,37 @@ struct ImmersiveView: View {
                 )
                 entity.components.set(rotationComponent)
                 
-                content.add(entity)
+                solarSystemEntity.addChild(entity)
             }
+            
+            solarSystemEntity.position = [0, 0.5, 0]
+            solarSystemEntity.scale *= 0.5
+            content.add(solarSystemEntity)
         }
+        .gesture(
+            TapGesture()
+                .targetedToAnyEntity()
+                .onEnded { value in
+                    // タップされたエンティティから天体情報を取得
+                    let tappedEntity = value.entity
+                    
+                    // エンティティの名前から天体を特定
+                    for body in SolarSystemData.celestialBodies {
+                        if tappedEntity.name == body.name {
+                            appModel.selectedCelestialBodyData = body
+                            break
+                        }
+                    }
+                }
+        )
     }
     
     /// 天体のEntityを作成するヘルパー関数
     private func createCelestialBody(_ body: CelestialBody) -> Entity {
         let entity = Entity()
+        
+        // エンティティに名前を設定（タップ時の識別用）
+        entity.name = body.name
         
         // サイズを調整
         let baseRadius: Float = body.name == "Sun" ? body.radius : body.radius * 0.05 // 惑星は見やすくするために小さく調整
