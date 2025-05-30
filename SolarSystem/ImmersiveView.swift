@@ -89,13 +89,19 @@ struct ImmersiveView: View {
         
         // マテリアルを作成
         var material = SimpleMaterial()
-        // SIMD4を使用してRGBAを直接設定
-        material.color = SimpleMaterial.BaseColor(tint: .init(
-            red: CGFloat(body.color.x),
-            green: CGFloat(body.color.y),
-            blue: CGFloat(body.color.z),
-            alpha: 1.0
-        ))
+        
+        // AssetsからImage Setを読み込んでテクスチャとして設定
+        if let textureResource = try? TextureResource.load(named: body.name) {
+            material.color = SimpleMaterial.BaseColor(texture: MaterialParameters.Texture(textureResource))
+        } else {
+            // 画像が見つからない場合はフォールバックとして元の色を使用
+            material.color = SimpleMaterial.BaseColor(tint: .init(
+                red: CGFloat(body.color.x),
+                green: CGFloat(body.color.y),
+                blue: CGFloat(body.color.z),
+                alpha: 1.0
+            ))
+        }
         material.metallic = 0.0
         
         // ModelComponentを追加
