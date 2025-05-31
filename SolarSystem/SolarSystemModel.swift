@@ -69,7 +69,7 @@ class SolarSystemModel {
         let sphereMesh = MeshResource.generateSphere(radius: baseRadius)
         
         // マテリアルを作成
-        var material = SimpleMaterial()
+        var material = UnlitMaterial()
         
         // AssetsからImage Setを読み込んでテクスチャとして設定
         if let textureResource = try? TextureResource.load(named: body.name) {
@@ -83,7 +83,6 @@ class SolarSystemModel {
                 alpha: 1.0
             ))
         }
-        material.metallic = 0.0
         
         // ModelComponentを追加
         entity.components.set(ModelComponent(mesh: sphereMesh, materials: [material]))
