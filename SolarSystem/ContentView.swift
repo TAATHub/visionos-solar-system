@@ -12,7 +12,7 @@ struct ContentView: View {
             if let selectedBodyData = appModel.selectedCelestialBodyData,
                let selectedBody = selectedBodyData as? CelestialBody {
                 VStack(spacing: 16) {
-                    Text(selectedBody.name)
+                    Text(selectedBody.japaneseName)
                         .font(.largeTitle)
                         .fontWeight(.bold)
                     
@@ -51,7 +51,7 @@ struct ContentView: View {
             ToggleImmersiveSpaceButton()
         }
         .padding()
-        .frame(width: 480, height: 480)
+        .frame(width: 480, height: 640)
     }
 }
 

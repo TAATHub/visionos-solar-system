@@ -4,6 +4,7 @@ import RealityKit
 /// 天体の情報を格納する構造体
 struct CelestialBody {
     let name: String
+    let japaneseName: String // 日本語名を追加
     let radius: Float // 太陽を基準とした相対サイズ
     let orbitRadius: Float // 太陽からの距離（AU単位を基に調整）
     let orbitPeriod: Float // 地球を1.0とした相対的な公転周期
@@ -22,6 +23,7 @@ struct SolarSystemData {
         // 太陽
         CelestialBody(
             name: "Sun",
+            japaneseName: "太陽",
             radius: 1.0,
             orbitRadius: 0.0,
             orbitPeriod: 0.0,
@@ -34,6 +36,7 @@ struct SolarSystemData {
         // 水星
         CelestialBody(
             name: "Mercury",
+            japaneseName: "水星",
             radius: 0.383,
             orbitRadius: 1.5,
             orbitPeriod: earthOrbitPeriod * 0.24,
@@ -46,6 +49,7 @@ struct SolarSystemData {
         // 金星
         CelestialBody(
             name: "Venus",
+            japaneseName: "金星",
             radius: 0.949,
             orbitRadius: 2.0,
             orbitPeriod: earthOrbitPeriod * 0.62,
@@ -58,6 +62,7 @@ struct SolarSystemData {
         // 地球
         CelestialBody(
             name: "Earth",
+            japaneseName: "地球",
             radius: 1.0,
             orbitRadius: 2.5,
             orbitPeriod: earthOrbitPeriod,
@@ -70,6 +75,7 @@ struct SolarSystemData {
         // 火星
         CelestialBody(
             name: "Mars",
+            japaneseName: "火星",
             radius: 0.532,
             orbitRadius: 3.0,
             orbitPeriod: earthOrbitPeriod * 1.88,
@@ -82,6 +88,7 @@ struct SolarSystemData {
         // 木星
         CelestialBody(
             name: "Jupiter",
+            japaneseName: "木星",
             radius: 11.21,
             orbitRadius: 4.5,
             orbitPeriod: earthOrbitPeriod * 11.86,
@@ -94,6 +101,7 @@ struct SolarSystemData {
         // 土星
         CelestialBody(
             name: "Saturn",
+            japaneseName: "土星",
             radius: 9.45,
             orbitRadius: 6.0,
             orbitPeriod: earthOrbitPeriod * 29.46,
@@ -106,6 +114,7 @@ struct SolarSystemData {
         // 天王星
         CelestialBody(
             name: "Uranus",
+            japaneseName: "天王星",
             radius: 4.01,
             orbitRadius: 7.5,
             orbitPeriod: earthOrbitPeriod * 84.01,
@@ -118,6 +127,7 @@ struct SolarSystemData {
         // 海王星
         CelestialBody(
             name: "Neptune",
+            japaneseName: "海王星",
             radius: 3.88,
             orbitRadius: 9.0,
             orbitPeriod: earthOrbitPeriod * 164.8,
