@@ -1,6 +1,5 @@
 import SwiftUI
 import RealityKit
-// import RealityKitContent
 
 struct ContentView: View {
     @Environment(AppModel.self) private var appModel
@@ -8,7 +7,7 @@ struct ContentView: View {
     var body: some View {
         @Bindable var appModel = appModel
         
-        VStack(spacing: 40) {
+        VStack(spacing: 0) {
             if let selectedBodyData = appModel.selectedCelestialBodyData,
                let selectedBody = selectedBodyData as? CelestialBody {
                 VStack(spacing: 16) {
@@ -19,21 +18,22 @@ struct ContentView: View {
                     Text(selectedBody.description)
                         .font(.body)
                         .lineLimit(nil)
+                        .fixedSize(horizontal: false, vertical: true)
                         .multilineTextAlignment(.leading)
                         .foregroundColor(.primary)
                 }
-                .padding()
                 .background(Color(.systemBackground))
-                .cornerRadius(12)
-                .shadow(radius: 5)
             } else {
                 Text("天体をタッチして詳細を表示")
                     .foregroundColor(.secondary)
+                    .frame(maxHeight: .infinity)
             }
-
+            
+            Spacer(minLength: 0)
+            
             // Immersion Style切り替えPicker
             VStack(spacing: 16) {
-                Text("スタイル")
+                Text("Immersion Style")
                     .font(.headline)
                 
                 Picker("Immersion Style", selection: $appModel.selectedImmersionStyleOption) {
@@ -43,15 +43,14 @@ struct ContentView: View {
                 }
                 .pickerStyle(.segmented)
             }
-            .padding()
+            .padding(.horizontal, 40)
             .background(Color(.systemBackground))
-            .cornerRadius(12)
-            .shadow(radius: 5)
 
             ToggleImmersiveSpaceButton()
+                .padding(.top, 40)
         }
-        .padding()
-        .frame(width: 480, height: 640)
+        .padding(40)
+        .frame(width: 480, height: 480)
     }
 }
 
