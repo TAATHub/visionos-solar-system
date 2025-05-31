@@ -151,6 +151,7 @@ extension Entity {
     /// - Returns: skyboxエンティティ
     static func createMilkyWaySkybox() -> Entity {
         let skyboxEntity = Entity()
+        skyboxEntity.name = "skybox"
         
         // 大きな球体メッシュを作成（内側から見るため）
         let sphereMesh = MeshResource.generateSphere(radius: 1000.0)

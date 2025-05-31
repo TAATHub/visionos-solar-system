@@ -6,6 +6,8 @@ struct ContentView: View {
     @Environment(AppModel.self) private var appModel
 
     var body: some View {
+        @Bindable var appModel = appModel
+        
         VStack(spacing: 40) {
             if let selectedBodyData = appModel.selectedCelestialBodyData,
                let selectedBody = selectedBodyData as? CelestialBody {
@@ -28,6 +30,23 @@ struct ContentView: View {
                 Text("天体をタッチして詳細を表示")
                     .foregroundColor(.secondary)
             }
+
+            // Immersion Style切り替えPicker
+            VStack(spacing: 16) {
+                Text("スタイル")
+                    .font(.headline)
+                
+                Picker("Immersion Style", selection: $appModel.selectedImmersionStyleOption) {
+                    ForEach(AppModel.ImmersionStylePickerOption.allCases) { option in
+                        Text(option.rawValue).tag(option)
+                    }
+                }
+                .pickerStyle(.segmented)
+            }
+            .padding()
+            .background(Color(.systemBackground))
+            .cornerRadius(12)
+            .shadow(radius: 5)
 
             ToggleImmersiveSpaceButton()
         }
