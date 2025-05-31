@@ -11,32 +11,16 @@ struct RotationSystem: System {
         let deltaTime = Float(context.deltaTime)
         
         for entity in context.entities(matching: Self.query, updatingSystemWhen: .rendering) {
-            guard var rotationComponent = entity.components[RotationComponent.self] else { continue }
+            guard let rotationComponent = entity.components[RotationComponent.self] else { continue }
             
-            // 角度を更新
-            rotationComponent.currentAngle += rotationComponent.angularVelocity * deltaTime
+            // フレーム間の回転角度を計算
+            let frameRotationAngle = rotationComponent.angularVelocity * deltaTime
             
-            // 2πを超えたら正規化
-            if rotationComponent.currentAngle >= 2.0 * .pi {
-                rotationComponent.currentAngle -= 2.0 * .pi
-            }
+            // Y軸周りの回転クォータニオンを作成
+            let rotation = simd_quatf(angle: frameRotationAngle, axis: SIMD3<Float>(0, 1, 0))
             
-            // 軸の傾斜を考慮した回転軸を計算
-            let tiltRadians = rotationComponent.axialTilt * .pi / 180.0
-            let tiltedAxis = SIMD3<Float>(
-                sin(tiltRadians),
-                cos(tiltRadians),
-                0
-            )
-            
-            // 回転クォータニオンを作成
-            let rotation = simd_quatf(angle: rotationComponent.currentAngle, axis: tiltedAxis)
-            
-            // エンティティの回転を更新
-            entity.orientation = rotation
-            
-            // コンポーネントを更新
-            entity.components[RotationComponent.self] = rotationComponent
+            // エンティティの回転を相対的に更新（軸の傾きは保持される）
+            entity.setOrientation(rotation, relativeTo: entity)
         }
     }
 }

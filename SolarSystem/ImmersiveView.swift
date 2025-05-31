@@ -107,6 +107,11 @@ struct ImmersiveView: View {
         // ModelComponentを追加
         entity.components.set(ModelComponent(mesh: sphereMesh, materials: [material]))
         
+        // 軸の傾きを事前に設定
+        let tiltRadians = body.axialTilt * .pi / 180.0
+        let tiltRotation = simd_quatf(angle: tiltRadians, axis: SIMD3<Float>(1, 0, 0)) // X軸周りに傾ける
+        entity.orientation = tiltRotation
+        
         return entity
     }
 }
