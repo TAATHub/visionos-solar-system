@@ -11,6 +11,10 @@ struct ImmersiveView: View {
             OrbitSystem.registerSystem()
             RotationSystem.registerSystem()
             
+            // MilkyWayのskyboxを作成して追加
+            let skyboxEntity = Entity.createMilkyWaySkybox()
+            content.add(skyboxEntity)
+            
             // Modelから太陽系エンティティを作成
             let solarSystemEntity = model.createSolarSystem()
             content.add(solarSystemEntity)

@@ -146,4 +146,31 @@ extension Entity {
         
         return layerEntity
     }
+    
+    /// MilkyWayのImage Setを使ってskybox用のEntityを作成するメソッド
+    /// - Returns: skyboxエンティティ
+    static func createMilkyWaySkybox() -> Entity {
+        let skyboxEntity = Entity()
+        
+        // 大きな球体メッシュを作成（内側から見るため）
+        let sphereMesh = MeshResource.generateSphere(radius: 1000.0)
+        
+        // MilkyWayテクスチャを読み込み
+        guard let milkyWayTexture = try? TextureResource.load(named: "MilkyWay") else {
+            print("MilkyWayテクスチャの読み込みに失敗しました")
+            return skyboxEntity
+        }
+        
+        // skybox用のマテリアルを作成
+        var skyboxMaterial = UnlitMaterial()
+        skyboxMaterial.color = .init(texture: .init(milkyWayTexture))
+        
+        // 内側から見えるように面を反転
+        skyboxMaterial.faceCulling = .front
+        
+        // ModelComponentを設定
+        skyboxEntity.components.set(ModelComponent(mesh: sphereMesh, materials: [skyboxMaterial]))
+        
+        return skyboxEntity
+    }
 } 
