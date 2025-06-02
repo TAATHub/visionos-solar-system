@@ -42,6 +42,18 @@ struct ContentView: View {
                     }
                 }
                 .pickerStyle(.segmented)
+                
+                // 軌道線表示トグル
+                HStack {
+                    Text("軌道線を表示")
+                        .font(.headline)
+                    
+                    Spacer()
+                    
+                    Toggle("", isOn: $appModel.showOrbits)
+                        .toggleStyle(SwitchToggleStyle())
+                }
+                .padding(.top, 8)
             }
             .padding(.horizontal, 40)
             .background(Color(.systemBackground))

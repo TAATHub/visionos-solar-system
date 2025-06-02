@@ -9,6 +9,10 @@ class SolarSystemModel {
     func createSolarSystem() -> Entity {
         let solarSystemEntity = Entity()
         
+        // 軌道線を先に追加（惑星より背景に表示される）
+        let orbitsEntity = Entity.createPlanetOrbits()
+        solarSystemEntity.addChild(orbitsEntity)
+        
         // 太陽系の天体を作成
         for (index, body) in SolarSystemData.celestialBodies.enumerated() {
             let entity = createCelestialBody(body)
@@ -24,7 +28,7 @@ class SolarSystemModel {
                     radius: body.orbitRadius,
                     axis: [0, 1, 0],
                     period: TimeInterval(body.orbitPeriod),
-                    centerPosition: [0, 1, 0]
+                    centerPosition: [0, 0, 0]
                 )
                 entity.components.set(orbitComponent)
                 
@@ -32,10 +36,10 @@ class SolarSystemModel {
                 let angle = Float(index) * (2.0 * .pi / Float(SolarSystemData.celestialBodies.count - 1))
                 let x = body.orbitRadius * cos(angle)
                 let z = body.orbitRadius * sin(angle)
-                entity.position = [x, 1.0, z]
+                entity.position = [x, 0, z]
             } else {
                 // 太陽は中心に配置
-                entity.position = [0, 1, 0]
+                entity.position = [0, 0, 0]
             }
             
             // 自転コンポーネントを追加

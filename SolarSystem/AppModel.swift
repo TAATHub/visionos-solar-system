@@ -26,6 +26,9 @@ class AppModel {
     
     var selectedType: Int = 0
     
+    // 軌道線の表示状態
+    var showOrbits: Bool = true
+    
     // 選択された天体の情報
     var selectedCelestialBodyData: Any?
 }

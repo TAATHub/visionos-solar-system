@@ -174,4 +174,56 @@ extension Entity {
         
         return skyboxEntity
     }
+    
+    /// 各惑星の公転軌道を細い線として表示するメソッド
+    /// - Returns: 全ての軌道線を含むエンティティ
+    static func createPlanetOrbits() -> Entity {
+        let orbitsEntity = Entity()
+        orbitsEntity.name = "orbits"
+        
+        // 各惑星の軌道を作成（太陽以外）
+        for body in SolarSystemData.celestialBodies {
+            // 太陽は軌道がないのでスキップ
+            guard body.name != "Sun" else { continue }
+            
+            // 軌道線を非常に細いリングとして作成
+            let orbitLineEntity = createOrbitLine(
+                radius: body.orbitRadius,
+                alpha: 0.3, // 軌道線は控えめな透明度
+                red: 0.6,
+                green: 0.6,
+                blue: 0.8,
+                segments: 120 // 滑らかな円のために多くのセグメント
+            )
+            orbitLineEntity.name = "\(body.name)_orbit"
+            orbitsEntity.addChild(orbitLineEntity)
+        }
+        
+        return orbitsEntity
+    }
+    
+    /// 個別の軌道線を作成するヘルパーメソッド
+    /// - Parameters:
+    ///   - radius: 軌道の半径
+    ///   - alpha: 透明度
+    ///   - red: 赤色成分
+    ///   - green: 緑色成分
+    ///   - blue: 青色成分
+    ///   - segments: セグメント数
+    /// - Returns: 軌道線エンティティ
+    private static func createOrbitLine(radius: Float, alpha: Float, red: Float, green: Float, blue: Float, segments: Int) -> Entity {
+        // 線の太さを決める（非常に細く）
+        let lineWidth: Float = 0.005
+        
+        // createRingLayerを使って非常に細いリングを作成
+        return createRingLayer(
+            innerRadius: radius - lineWidth,
+            outerRadius: radius + lineWidth,
+            alpha: alpha,
+            red: red,
+            green: green,
+            blue: blue,
+            segments: segments
+        )
+    }
 } 

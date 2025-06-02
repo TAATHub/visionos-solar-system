@@ -33,6 +33,11 @@ struct ImmersiveView: View {
                     skyboxEntiry.removeFromParent()
                 }
             }
+            
+            // 軌道線の表示/非表示を制御
+            if let orbitsEntity = rootEntity.findEntity(named: "orbits") {
+                orbitsEntity.isEnabled = appModel.showOrbits
+            }
         }
         .gesture(
             TapGesture()
