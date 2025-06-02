@@ -129,15 +129,13 @@ extension Entity {
         }
         
         // リング用のマテリアルを作成（半透明、両面レンダリング）
-        var ringMaterial = SimpleMaterial()
-        ringMaterial.color = SimpleMaterial.BaseColor(tint: .init(
+        var ringMaterial = UnlitMaterial()
+        ringMaterial.color = .init(tint: .init(
             red: CGFloat(red),
             green: CGFloat(green),
             blue: CGFloat(blue),
             alpha: CGFloat(alpha)
         ))
-        ringMaterial.metallic = 0.0
-        ringMaterial.roughness = 0.9
         // 両面レンダリングを有効にする
         ringMaterial.faceCulling = .none
         
@@ -189,10 +187,10 @@ extension Entity {
             // 軌道線を非常に細いリングとして作成
             let orbitLineEntity = createOrbitLine(
                 radius: body.orbitRadius,
-                alpha: 0.3, // 軌道線は控えめな透明度
-                red: 0.6,
-                green: 0.6,
-                blue: 0.8,
+                alpha: 0.1, // 軌道線は控えめな透明度
+                red: 0.5,
+                green: 0.5,
+                blue: 0.5,
                 segments: 120 // 滑らかな円のために多くのセグメント
             )
             orbitLineEntity.name = "\(body.name)_orbit"
@@ -213,7 +211,7 @@ extension Entity {
     /// - Returns: 軌道線エンティティ
     private static func createOrbitLine(radius: Float, alpha: Float, red: Float, green: Float, blue: Float, segments: Int) -> Entity {
         // 線の太さを決める（非常に細く）
-        let lineWidth: Float = 0.005
+        let lineWidth: Float = 0.0025
         
         // createRingLayerを使って非常に細いリングを作成
         return createRingLayer(

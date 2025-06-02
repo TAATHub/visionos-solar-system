@@ -9,22 +9,6 @@ struct ContentView: View {
         @Bindable var appModel = appModel
         
         VStack(spacing: 0) {
-            // ヘッダー部分に歯車アイコンを追加
-            HStack {
-                Spacer()
-                
-                Button(action: {
-                    showingSettings = true
-                }) {
-                    Image(systemName: "gearshape.fill")
-                        .font(.title2)
-                        .foregroundColor(.primary)
-                }
-                .buttonStyle(PlainButtonStyle())
-            }
-            .padding(.horizontal, 20)
-            .padding(.top, 10)
-            
             // 天体情報表示部分
             if let selectedBodyData = appModel.selectedCelestialBodyData,
                let selectedBody = selectedBodyData as? CelestialBody {
@@ -54,6 +38,16 @@ struct ContentView: View {
         }
         .padding(64)
         .frame(width: 800, height: 600)
+        .overlay(alignment: .topTrailing) {
+            Button(action: {
+                showingSettings = true
+            }) {
+                Image(systemName: "gearshape.fill")
+                    .font(.title2)
+                    .foregroundColor(.primary)
+            }
+            .padding(40)
+        }
         .sheet(isPresented: $showingSettings) {
             SettingsView()
         }
