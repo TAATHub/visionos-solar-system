@@ -23,7 +23,7 @@ struct OrbitSystem: System {
             
             // 新しい位置を計算
             let x = orbitComponent.radius * cos(orbitComponent.currentAngle)
-            let z = orbitComponent.radius * sin(orbitComponent.currentAngle)
+            let z = -orbitComponent.radius * sin(orbitComponent.currentAngle)
             
             // Y軸回転の場合の位置計算（他の軸にも対応可能）
             let newPosition = SIMD3<Float>(x, 0, z) + orbitComponent.centerPosition
