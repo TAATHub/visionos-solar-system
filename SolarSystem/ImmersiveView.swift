@@ -14,6 +14,9 @@ struct ImmersiveView: View {
             OrbitSystem.registerSystem()
             RotationSystem.registerSystem()
             
+            // 既存の子エンティティをクリアして重複を防ぐ
+            rootEntity.children.removeAll()
+            
             // Modelから太陽系エンティティを作成
             let solarSystemEntity = model.createSolarSystem()
             rootEntity.addChild(solarSystemEntity)
