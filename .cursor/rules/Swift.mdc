@@ -1,0 +1,89 @@
+---
+description: 
+globs: *.swift
+alwaysApply: false
+---
+# SwiftUI Guidelines & RealityKit Development Rules
+
+## Core Swift & SwiftUI Principles
+
+### General Coding Guidelines
+- Follow Apple's Swift style guide and SwiftUI conventions
+- Use meaningful, descriptive variable and function names
+- Prefer explicit types over `var` when the type is not obvious
+- Use `private` and `fileprivate` access modifiers appropriately
+- Favor composition over inheritance
+- Use guards for early returns and input validation
+
+### SwiftUI Best Practices
+- Create small, focused views that do one thing well
+- Extract complex logic into separate computed properties or methods
+- Use `@State` for local state, `@StateObject` for owned objects, `@ObservedObject` for passed objects
+- Prefer `@StateObject` over `@ObservedObject` for creating new instances
+- Use `@Environment` and `@EnvironmentObject` for dependency injection
+- Implement proper accessibility support with labels and hints
+- Use `@ViewBuilder` for custom view builders
+- Prefer SwiftUI's built-in animations over manual implementations
+
+### State Management
+- Keep state as close to where it's used as possible
+- Use `@Binding` to share state between parent and child views
+- Implement proper state management with ObservableObject protocol
+- Use `@Published` wrapper for properties that trigger UI updates
+- Consider using `@AppStorage` or `@SceneStorage` for persistent data
+
+### View Architecture
+- Break complex views into smaller, reusable components
+- Use extensions to organize view code logically
+- Create custom ViewModifiers for reusable styling
+- Implement proper view hierarchy and navigation
+- Use GeometryReader sparingly and only when necessary
+
+---
+
+## Code Quality & Performance
+
+### Memory Management
+- Use weak references to avoid retain cycles
+- Properly manage object lifetimes in async contexts
+- Be mindful of memory usage in image and data processing
+- Use `@MainActor` for UI-related operations
+
+### Error Handling
+- Use proper error handling with Result types and throwing functions
+- Provide meaningful error messages
+- Handle edge cases gracefully
+- Implement proper fallback states in UI
+
+### Testing & Documentation
+- Write unit tests for business logic
+- Use SwiftUI previews for UI development
+- Document complex algorithms and business logic
+- Use meaningful commit messages
+
+### Performance Optimization
+- Profile code using Instruments when needed
+- Optimize expensive operations with async/await
+- Use lazy loading for expensive resources
+- Minimize view updates and redraws
+
+---
+
+## Code Organization
+
+### File Structure
+- One main type per file
+- Group related functionality in extensions
+- Use MARK comments to organize code sections
+- Follow consistent naming conventions for files
+
+### Import Statements
+- Order imports alphabetically
+- Group system frameworks separately from third-party
+- Only import what you need
+
+### Comments
+- Use /// for documentation comments
+- Explain why, not what
+- Keep comments up to date with code changes
+- Use TODO and FIXME appropriately
